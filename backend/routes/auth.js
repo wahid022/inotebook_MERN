@@ -6,8 +6,9 @@ const { body, validationResult } = require("express-validator"); // importing ex
 const bcrypt=require('bcryptjs');
 const JWT_SECRET='WahiisBack';
 const jwt = require('jsonwebtoken');
-
+var fetchuser=require('../middleware/fetchuser');
 //No login required
+
 router.post("/createuser",
                         // Errors Array before checking the credentials match first looking for valid name,email format and password thats why
 
@@ -132,6 +133,26 @@ router.post("/login",
                           console.error(error.message);
                           res.json(500).send("Some Error Occured");
                         }
+});
+
+
+// Router to fetch/get the user ....
+
+router.post("/getuser",fetchuser,async (req,res)=>{
+        
+        
+        // getting the userid from fetchuser that is sent from middleware const data=jwt.verify(token,JWT_SECRET) ;req.user=data.user;.....
+        try {
+          let userid=req.user.id;
+          // .select("-password") is excluding the password to find from db...
+          const user=await User.findById(userid).select("-password");
+          // Sending the user as response ..
+          res.send(user);
+          
+        } catch (error) {
+          console.error(error.message);
+          res.json(500).send("Some Error Occured");
+        }
 });
 
 module.exports = router;
