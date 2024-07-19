@@ -118,8 +118,6 @@ router.put('/updatenote/:id',fetchuser,async(req,res)=>{
 
 
 
-
-
 // Here Passing id of particular note to ientify ...
 router.delete('/deletenote/:id',fetchuser,async(req,res)=>{
 
@@ -160,8 +158,5 @@ router.delete('/deletenote/:id',fetchuser,async(req,res)=>{
     
 
 });
-
-
-
 
 module.exports=router;
