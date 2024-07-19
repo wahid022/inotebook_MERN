@@ -106,7 +106,7 @@ router.post("/login",
                                 return res.status(400).json({error:"Please try to login with correct credentials..."});
                               }
 
-                              // comparing the password from bcrypt .compare funtion ...
+                              // comparing the password from bcrypt .compare funtion ...user.password is database password 
                               let passwordCompare=await bcrypt.compare(password,user.password);
 
                               // If there is no such password in the db ...then again sending the bad requests..

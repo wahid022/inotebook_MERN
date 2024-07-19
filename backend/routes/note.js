@@ -54,7 +54,8 @@ router.post('/addnote',fetchuser,[
      
 });
 
-// Here Passing id of particular note to ientify ...
+
+
 router.put('/updatenote/:id',fetchuser,async(req,res)=>{
 
     try {
@@ -101,7 +102,7 @@ router.put('/updatenote/:id',fetchuser,async(req,res)=>{
                     res.status(401).send("Not Allowed");
                 }
 
-                // now finally updating the note 
+                // now finally updating the note ..
                 note=await Note.findByIdAndUpdate(req.params.id,{$set:temp},{new:true})
                 res.json({note});
 
@@ -114,6 +115,53 @@ router.put('/updatenote/:id',fetchuser,async(req,res)=>{
     
 
 });
+
+
+
+
+
+// Here Passing id of particular note to ientify ...
+router.delete('/deletenote/:id',fetchuser,async(req,res)=>{
+
+    try {
+
+                //req.params.id is the id which will be passed as a string while hitting api from frontend or thunder client like /deletenote/:id
+                var note_id=req.params.id;
+
+                //finding that particular note ..
+                let note=await Note.findById(note_id);
+
+
+                //If that note doesnt exists then return bad request ....
+                if(!note)
+                {
+                    return res.status(404).send("Not found");
+                }
+
+                //note.user.toString() its needed to convert because note model contains user of that particular note ...
+                // Here we are checking that weather the logged in user doesnt update someone other notes so  req.user.id is the logged in user id 
+                //..and note.user.toString() is the user whose note is there ..
+
+                if(note.user.toString() !== req.user.id)
+                {
+                    res.status(401).send("Not Allowed");
+                }
+
+                // now finally deleting the note ..
+                note=await Note.findByIdAndDelete(req.params.id)
+                res.json({"Success":"Note Has Been Deleted",note:note});
+
+        
+    } catch (error) {
+        console.error(error.message);
+        res.json(500).send("Some Error Occured");
+      }
+
+    
+
+});
+
+
 
 
 module.exports=router;
