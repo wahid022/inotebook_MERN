@@ -12,14 +12,18 @@ const Notes = () => {
     //..so extracting those state into new state of const [notes, setNotes] = useState(notesInitial) of NoteState.js
     const {notes, setNotes} = context;
     return (
-        <div className="row my-3">
-            <h2>You Notes</h2> 
+
+    <>
+        <h2 className='text-center'>You Notes</h2>
+        <div className="my-3 container d-flex flex-row flex-wrap justify-content-around">
+             
             {notes.map((note)=>{
 
                 //Including <Noteitem> component for individual note and passing single note as its under the loop ..
                 return <Noteitem note={note}/>  
             })}
             </div>
+    </>
     )
 }
 

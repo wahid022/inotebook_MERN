@@ -25,7 +25,7 @@ const Home = (props) =>{
             </div>
           
 
-          // Including Notes Component from home Page..
+          {/* // Including Notes Component from home Page.. */}
             <Notes/>
         </div>
     )
