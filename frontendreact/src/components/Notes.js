@@ -1,6 +1,7 @@
 import React, {useContext} from 'react'
 import noteContext from "../context/notes/noteContext"
 import Noteitem from './Noteitem';
+import AddNote from './AddNote';
 
 
 const Notes = () => {
@@ -10,17 +11,22 @@ const Notes = () => {
 
     //it is coming from NoteState.js as Context and it will be accessible to all components 
     //..so extracting those state into new state of const [notes, setNotes] = useState(notesInitial) of NoteState.js
-    const {notes, setNotes} = context;
+    //addNote is also coming from context API from NoteState.js as addNOte is a function
+    const {notes, addNote} = context;
     return (
 
     <>
-        <h2 className='text-center'>You Notes</h2>
-        <div className="my-3 container d-flex flex-row flex-wrap justify-content-around">
+
+        {/* importing <AddNote> component which contains the form to add notes  */}
+        
+        <AddNote></AddNote>
+        <h2 className='text-center'>Your Notes</h2>
+        <div className="my-3 container d-flex flex-wrap justify-content-between">
              
             {notes.map((note)=>{
 
                 //Including <Noteitem> component for individual note and passing single note as its under the loop ..
-                return <Noteitem note={note}/>  
+                return <Noteitem key={note._id} note={note}/>  
             })}
             </div>
     </>
