@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import noteContext from "../context/notes/noteContext"
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
@@ -12,7 +12,12 @@ const Notes = () => {
     //it is coming from NoteState.js as Context and it will be accessible to all components 
     //..so extracting those state into new state of const [notes, setNotes] = useState(notesInitial) of NoteState.js
     //addNote is also coming from context API from NoteState.js as addNOte is a function
-    const {notes, addNote} = context;
+    const {notes, getNotes} = context;
+
+    useEffect(()=>{
+        getNotes()
+    },[])
+    
     return (
 
     <>
