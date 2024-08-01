@@ -22,17 +22,30 @@ const NoteState = (props) => {
   }
 
   // Add a Note
+
+  //Here async (title, description, tag) => all the parameters is coming from AddNote.js 
+  // and this addNote function is passed from NoteState.js to AddNote.js as a context
+
   const addNote = async (title, description, tag) => {
-    // TODO: API Call
-    // API Call 
+    
+    // API Call from frontend to backend ...and here we are supplying the auth token as a 
+    // header which we were doing in thunder client....
+
+    
     const response = await fetch(`${host}/api/notes/addnote`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjY5NzczNWIyZDQwOGM4MWQyMjkwYWVjIn0sImlhdCI6MTcyMTIwMTc2NH0.6MhskYl7lmak48XZPFb99hEx9T-JMq2yHuOF-kSlSD4"
       },
+
+      
+      // Storing title, description, tag in body of api call which we were doing in thunderclient previously...
       body: JSON.stringify({title, description, tag})
     });
+
+
+    // console.log("Response : ...",response.body);
      
 
     console.log("Adding a new note")
@@ -48,36 +61,62 @@ const NoteState = (props) => {
     setNotes(notes.concat(note))
   }
 
+
+
+
+
   // Delete a Note
-  const deleteNote = (id) => {
-    // TODO: API Call
-    console.log("Deleting the note with id" + id);
-    const newNotes = notes.filter((note) => { return note._id !== id })
-    setNotes(newNotes)
+  const deleteNote = async (id) => {
+        const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjY5NzczNWIyZDQwOGM4MWQyMjkwYWVjIn0sImlhdCI6MTcyMTIwMTc2NH0.6MhskYl7lmak48XZPFb99hEx9T-JMq2yHuOF-kSlSD4"
+          }
+        });
+        const json = response.json();
+        console.log(json)
+
+        console.log("Deleting the note with id" + id);
+
+        // return note._id !== id  means id which is deleted should not be present anymore in the notes array ...
+        const newNotes = notes.filter((note) => { return note._id !== id })
+        setNotes(newNotes)
   }
-  // Edit a Note
+
+
+
+
+
+  // Edit or Update a Note
   const editNote = async (id, title, description, tag) => {
     // API Call 
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjY5NzczNWIyZDQwOGM4MWQyMjkwYWVjIn0sImlhdCI6MTcyMTIwMTc2NH0.6MhskYl7lmak48XZPFb99hEx9T-JMq2yHuOF-kSlSD4"
       },
       body: JSON.stringify({title, description, tag})
     });
-    const json = response.json();
+    const json = await response.json();
+    console.log(json);
 
-    // Logic to edit in client
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
+
+    // Since we cannot change the state Variable so here we have created the copy of that state variable named newNotes.
+    let newNotes = JSON.parse(JSON.stringify(notes))
+    
+    //Iterating over the frontend newNotes array so that it will reflect in frontend as well...
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = newNotes[index];
       if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        newNotes[index].tag = tag; 
+        break; 
       }
-
-    }
+    }  
+    setNotes(newNotes);
   }
 
   return (

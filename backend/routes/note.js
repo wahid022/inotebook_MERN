@@ -112,8 +112,6 @@ router.put('/updatenote/:id',fetchuser,async(req,res)=>{
         res.json(500).send("Some Error Occured");
       }
 
-    
-
 });
 
 
