@@ -36,18 +36,18 @@ const AddNote = () => {
             <form className="my-3">
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">Title</label>
-                    <input type="text" className="form-control" id="title" name="title" aria-describedby="emailHelp" onChange={onChange} /> 
+                    <input type="text" className="form-control" id="title" name="title" aria-describedby="emailHelp" required minLength={3} onChange={onChange} /> 
                 </div>
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Description</label>
-                    <input type="text" className="form-control" id="description" name="description" onChange={onChange} />
+                    <input type="text" className="form-control" id="description" name="description" required minLength={5} onChange={onChange} />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="tag" className="form-label">Tag</label>
-                    <input type="text" className="form-control" id="tag" name="tag" onChange={onChange} />
+                    <input type="text" className="form-control" id="tag" name="tag" required minLength={3} onChange={onChange} />
                 </div>
                
-                <button type="submit" className="btn btn-primary" onClick={handleClick}>Add Note</button>
+                <button  disabled={note.title.length<3 || note.description<5} type="submit" className="btn btn-primary" onClick={handleClick}>Add Note</button>
             </form>
         </div>
     )

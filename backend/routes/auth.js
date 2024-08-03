@@ -86,7 +86,11 @@ router.post("/login",
                         // If there are errors ,return Bad Requests and the errors
                         // validationRequest(req) : Extracts the validation errors from a request and makes them available in a Result object
                         const errors = validationResult(req);
+                        
 
+                        //this variable is sent to JSON response to check in frontend 
+                        // that the connection to API call is true or false..
+                        let success=false;
                         //If there are Errors in writing pattern of email and password then sending the bad request.. 
                         if (!errors.isEmpty()) {
                           return res.status(400).json({ errors: errors.array() });
@@ -103,7 +107,9 @@ router.post("/login",
                               //If there is no such user with that email then sending the bad request..
                               if(!user)
                               {
+                                success=false;
                                 return res.status(400).json({error:"Please try to login with correct credentials..."});
+                                
                               }
 
                               // comparing the password from bcrypt .compare funtion ...user.password is database password 
@@ -112,7 +118,8 @@ router.post("/login",
                               // If there is no such password in the db ...then again sending the bad requests..
                               if(!passwordCompare)
                               {
-                                return res.status(400).json({error:"Please try to login with correct credentials..."});
+                                success=false;
+                                return res.status(400).json({success,error:"Please try to login with correct credentials..."});
                               }
 
                               // If the user founds in the DB then ....
@@ -126,7 +133,8 @@ router.post("/login",
 
                               //if the both the credentials matches then sign the signature and sending the user id as data variable and sending the auth token as response ..
                               const authToken=jwt.sign(data,JWT_SECRET);
-                              res.json({"authToken":authToken});
+                              success=true;
+                              res.json({success,authToken});
 
                            
                         } catch (error) {

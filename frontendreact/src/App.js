@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 
-
+import Login from './components/Login';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import About from './components/About';
@@ -29,6 +29,9 @@ function App() {
               </Route>
               <Route exact path="/about">
                 <About />
+              </Route>
+              <Route exact path="/login">
+                <Login />
               </Route>
             </Switch>
           </Router>
