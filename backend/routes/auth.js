@@ -22,10 +22,12 @@ router.post("/createuser",
                           async (req, res) => {
                             // If there are errors ,return Bad Requests and the errors
                             const errors = validationResult(req);
-
+                            
                         //If there are Errors in writing pattern of email and password then sending the bad request.. 
                         if (!errors.isEmpty()) {
-                              return res.status(400).json({ errors: errors.array() });
+
+                              
+                              return res.status(400).json({errors: errors.array() });
                             }
 
                             //  Checking whether the user with this email exists already
@@ -36,8 +38,9 @@ router.post("/createuser",
 
                               //If user is found then..Returninng bad request
                               if (user) {
+                               
                                 console.log(user);
-                                return res.status(400).json({ error: "Sorry a user with this email already exists" });
+                                return res.status(400).json({error: "Sorry a user with this email already exists" });
                               }
 
                               //If the user is not found..
@@ -46,12 +49,18 @@ router.post("/createuser",
                               const secPass=await bcrypt.hash(req.body.password,salt);
 
                               // if user is not found then Creating the new user
+                              
+                              
+            
                               user = await User.create({
                                 name: req.body.name,
                                 password: secPass,
                                 email: req.body.email,
                               });
-  
+
+                             
+                              
+                              console.log("Backend User : ",user);
 
                               // sending data as user id to auth token with jwt secret key so that we can unencrypt the user information with userid whenever needed to decrypt the user information 
                               const data={
@@ -59,16 +68,23 @@ router.post("/createuser",
                                     id:user.id
                                 }
                               }
+
+
                               //signing the signature and sending the user id as data variable and sending the auth token as response ..
-                              const authToken=jwt.sign(data,JWT_SECRET);
+                              const authToken= jwt.sign(data,JWT_SECRET);
+                             
                               console.log(authToken);
                               console.log("RESPONSE BODY : ", req.body);
-                              res.json(authToken);
+                              
+                              res.status(200).json('true',authToken);
                             } 
+
+                            
                             //catch errors
                             catch (error) {
+
                               console.error(error.message);
-                              res.json(500).send("Some Error Occured");
+                              res.json.send("Some Error Occured");
                             }
                           }
         );
